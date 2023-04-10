@@ -4,3 +4,4 @@ __pycache__
 coco.names.txt
 sort.py
 yolov8s.py
+object_detection.py
