@@ -2,3 +2,5 @@
 __pycache__
 *.pt
 coco.names.txt
+sort.py
+yolov8s.py
