@@ -7,20 +7,21 @@ yolo_plate_detect = torch.hub.load('ultralytics/yolov5', 'custom', 'plate_detect
 
 # set model confidence threshold
 # IoU default is 0.45
-yolo_plate_recog.conf = 0.6
+yolo_plate_recog.conf = 0.3
+yolo_plate_detect.conf = 0.9
 
 
-def plate_detection(image):
+def plate_process(image):
     results = yolo_plate_detect(image)
-    coordinates = []
-    x1, y1, x2, y2 = 0, 0, 0, 0
+    plate_infors = dict()
     for index, row in results.pandas().xyxy[0].iterrows():
         x1, y1, x2, y2 = int(row['xmin']), int(row['ymin']), int(row['xmax']), int(row['ymax'])
-        coordinates.append([x1, y1, x2, y2])
+        coordinate = [x1, y1, x2, y2]
+        cropped_image = image[y1:y2, x1:x2]
+        plate_text = plate_recognition(cropped_image)
+        plate_infors.update({plate_text: coordinate})
 
-    # cropped_image = image[coordinates[0][1]:coordinates[0][3], coordinates[0][0]:coordinates[0][2]]
-    # return cropped_image
-    return coordinates
+    return plate_infors
 
 
 def check_type(results):
