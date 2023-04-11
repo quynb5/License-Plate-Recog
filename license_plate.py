@@ -1,29 +1,35 @@
 import cv2
 import torch
+from ultralytics import YOLO
 
 # load model
 yolo_plate_recog = torch.hub.load('ultralytics/yolov5', 'custom', 'best_LPR_640_40epochs.pt')
 yolo_plate_detect = torch.hub.load('ultralytics/yolov5', 'custom', 'plate_detect_256.pt')
+yolo_vehicle_detect = YOLO("yolov8s_best_51epochs.pt")
 
 # set model confidence threshold
 # IoU default is 0.45
-yolo_plate_recog.conf = 0.3
-yolo_plate_detect.conf = 0.9
+yolo_plate_recog.conf = 0.6
+yolo_plate_detect.conf = 0.6
+
+classes = ["car", "motorbike"]
 
 
-def plate_process(image):
-    results = yolo_plate_detect(image)
-    plate_infors = dict()
-    for index, row in results.pandas().xyxy[0].iterrows():
-        x1, y1, x2, y2 = int(row['xmin']), int(row['ymin']), int(row['xmax']), int(row['ymax'])
-        coordinate = [x1, y1, x2, y2]
-        cropped_image = image[y1:y2, x1:x2]
-        plate_text = plate_recognition(cropped_image)
-        plate_infors.update({plate_text: coordinate})
+# Detect vehicles and get information (class_name, coordinate)
+def vehicle_detect(image):
+    vehicles_info = list()
+    results = yolo_vehicle_detect(image, conf=0.6)
+    for info in results:
+        for details in info.boxes:
+            x1, y1, x2, y2 = details.xyxy[0]
+            vehicle_coordinate = [int(x1), int(y1), int(x2), int(y2)]
+            # cfd = math.ceil(details.conf[0] * 100)
+            class_name = classes[int(details.cls[0])]
+            vehicles_info.append([class_name, vehicle_coordinate])
+    return vehicles_info
 
-    return plate_infors
 
-
+# Check type of license plate (1 or 2 line) (Not use in this code)
 def check_type(results):
     plate_type = 1
     list_x = []
@@ -41,6 +47,7 @@ def check_type(results):
     return plate_type
 
 
+# Check type of license plate (1 or 2 line) (Use in this code)
 def check_lp_type(image):
     plate_type = 1
     h, w = image.shape[:2]
@@ -49,6 +56,7 @@ def check_lp_type(image):
     return plate_type
 
 
+# Export digits of license plate, return plate text
 def lp_export(results, plate_type, y_middle):
     plate_text = ""
     list_center = []
@@ -81,9 +89,45 @@ def lp_export(results, plate_type, y_middle):
     return plate_text
 
 
+# Recognize digits in license plate
 def plate_recognition(image):
     y_mid = int(image.shape[0] / 2)
     lp_result = yolo_plate_recog(image)
     lp_type = check_lp_type(image)
     lp_text = lp_export(lp_result, lp_type, y_mid)
     return lp_text
+
+
+# Detect plate and get information (coordinate, digits)
+def plate_process(vehicle_image, vehicle_coordinate):
+    X1, Y1, X2, Y2 = vehicle_coordinate
+    results = yolo_plate_detect(vehicle_image)
+    coordinate = [None]*4
+    plate_text = ""
+    # if results.pandas().xyxy[0].empty, loop "for" not active, coordinate is None
+    for index, row in results.pandas().xyxy[0].iterrows():
+        x1, y1, x2, y2 = int(row['xmin']), int(row['ymin']), int(row['xmax']), int(row['ymax'])
+        coordinate = [X1+x1, Y1+y1, X1+x2, Y1+y2]
+        cropped_image = vehicle_image[y1:y2, x1:x2]
+        plate_text = plate_recognition(cropped_image)
+    return coordinate, plate_text
+
+
+# Process image (detect vehicle, detect license plate and recognize it) and return dictionary information
+# Include key is license plate text, values are vehicle name, vehicle coordinate and plate coordinate
+def image_process(input_image):
+    image_info = dict()
+    vehicle_infors = vehicle_detect(input_image)
+    for i, info in enumerate(vehicle_infors):
+        class_name, vehicle_coordinate = info
+        x1, y1, x2, y2 = vehicle_coordinate
+        vehicle_image = input_image[y1:y2, x1:x2]
+        plate_coordinate, plate_text = plate_process(vehicle_image, vehicle_coordinate)
+        # Check can detect license plate from vehicle image
+        # If any plate_coordinate is not None, mean can detect license plate
+        if any(plate_coordinate):
+            vehicle_infors[i].append(plate_coordinate)
+            image_info.update({plate_text: vehicle_infors[i]})
+    return image_info
+
+
