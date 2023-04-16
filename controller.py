@@ -1,7 +1,7 @@
 import cv2
 from PyQt5 import QtCore, QtGui, QtWidgets
-from app_ui1 import Ui_MainWindow
-from license_plate import plate_process, image_process
+from app_ui import Ui_MainWindow
+from license_plate import image_process, vehicle_detect
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -38,10 +38,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def insert_image(self):
         self.ui.label_input_img.clear()
         self.input_image = cv2.imread(self.file_path)
-
         # Convert RGB image to Pixmap for display on QLabel
-        # pix_img = QtGui.QImage(self.input_image.data, self.input_image.shape[1], self.input_image.shape[0],
-        #                        QtGui.QImage.Format_RGB888).rgbSwapped()
         image = cv2.resize(self.input_image, (400, 400))
         pix_img = QtGui.QImage(image.data, image.shape[1], image.shape[0], QtGui.QImage.Format_RGB888).rgbSwapped()
         self.ui.label_input_img.setPixmap(QtGui.QPixmap.fromImage(pix_img))
@@ -52,6 +49,7 @@ class MainWindow(QtWidgets.QMainWindow):
     # Process input image and return informations
     def plate_recognize(self):
         self.infors = image_process(self.input_image)
+        self.display_detect_image()
         self.display_notification("Image processing successfully")
 
     # Check mouse press on license plate regions
@@ -93,6 +91,20 @@ class MainWindow(QtWidgets.QMainWindow):
         pix_plate_img = QtGui.QImage(plate_image.data, plate_image.shape[1], plate_image.shape[0],
                                      QtGui.QImage.Format_RGB888).rgbSwapped()
         self.ui.label_license_plate.setPixmap(QtGui.QPixmap.fromImage(pix_plate_img))
+
+    # Display input image after detect vehicle
+    def display_detect_image(self):
+        display_image = self.input_image.copy()
+        vehicle_info = vehicle_detect(self.input_image)
+        vehicle_coordinates = [info[1] for info in vehicle_info]
+        for coordinate in vehicle_coordinates:
+            x1, y1, x2, y2 = coordinate
+            display_image = cv2.rectangle(display_image, (x1, y1), (x2, y2), (0, 0, 255), 4)
+        # Convert RGB image to Pixmap for display on QLabel
+        image = cv2.resize(display_image, (400, 400))
+        pix_img = QtGui.QImage(image.data, image.shape[1], image.shape[0], QtGui.QImage.Format_RGB888).rgbSwapped()
+        self.ui.label_input_img.clear()
+        self.ui.label_input_img.setPixmap(QtGui.QPixmap.fromImage(pix_img))
 
     # Display license plate digits
     def display_plate_text(self, plate_text):

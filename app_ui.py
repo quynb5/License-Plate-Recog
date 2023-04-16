@@ -14,19 +14,24 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(848, 452)
-        MainWindow.setStyleSheet("")
+        MainWindow.resize(857, 453)
+        MainWindow.setStyleSheet("\n"
+"")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setStyleSheet("background: rgba(50,50,50,0.5)")
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
+        self.horizontalLayout.setContentsMargins(2, 2, 2, 2)
+        self.horizontalLayout.setSpacing(2)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.fr_main_functions = QtWidgets.QFrame(self.centralwidget)
         self.fr_main_functions.setMaximumSize(QtCore.QSize(300, 16777215))
+        self.fr_main_functions.setStyleSheet("background-color: rgba(0,0,0,0.9)")
         self.fr_main_functions.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.fr_main_functions.setFrameShadow(QtWidgets.QFrame.Raised)
         self.fr_main_functions.setObjectName("fr_main_functions")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.fr_main_functions)
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout.setContentsMargins(5, 0, 5, 0)
         self.verticalLayout.setSpacing(0)
         self.verticalLayout.setObjectName("verticalLayout")
         self.fr_functions = QtWidgets.QFrame(self.fr_main_functions)
@@ -47,10 +52,14 @@ class Ui_MainWindow(object):
         self.verticalLayout_7.setSpacing(0)
         self.verticalLayout_7.setObjectName("verticalLayout_7")
         self.cbox_type_search = QtWidgets.QComboBox(self.fr_type_search)
-        self.cbox_type_search.setMaximumSize(QtCore.QSize(16777215, 30))
+        self.cbox_type_search.setMaximumSize(QtCore.QSize(150, 30))
         font = QtGui.QFont()
         font.setPointSize(10)
         self.cbox_type_search.setFont(font)
+        self.cbox_type_search.setStyleSheet("background: rgb(255, 255, 255);\n"
+"color: black;\n"
+"border: 2px solid white;\n"
+"")
         self.cbox_type_search.setIconSize(QtCore.QSize(20, 20))
         self.cbox_type_search.setObjectName("cbox_type_search")
         self.cbox_type_search.addItem("")
@@ -72,6 +81,8 @@ class Ui_MainWindow(object):
         font.setPointSize(10)
         self.le_file_path.setFont(font)
         self.le_file_path.setContextMenuPolicy(QtCore.Qt.DefaultContextMenu)
+        self.le_file_path.setStyleSheet("background: rgba(255,255,255,0.95);\n"
+"border: 2px solid white;")
         self.le_file_path.setText("")
         self.le_file_path.setObjectName("le_file_path")
         self.verticalLayout_4.addWidget(self.le_file_path, 0, QtCore.Qt.AlignBottom)
@@ -85,13 +96,36 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.setSpacing(0)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.btn_choose_path = QtWidgets.QPushButton(self.fr_choose_file)
+        self.btn_choose_path.setMinimumSize(QtCore.QSize(130, 0))
+        self.btn_choose_path.setMaximumSize(QtCore.QSize(16777215, 16777215))
         font = QtGui.QFont()
         font.setPointSize(9)
+        font.setBold(True)
+        font.setWeight(75)
         self.btn_choose_path.setFont(font)
+        self.btn_choose_path.setStyleSheet("QPushButton#btn_choose_path\n"
+"{\n"
+"   background-color: rgba(255,255,255,0.4);\n"
+"    color: white;\n"
+"    border-radius: 5px; \n"
+"    border: 2px solid white;\n"
+"}\n"
+"QPushButton:hover#btn_choose_path\n"
+"{\n"
+"   background-color: orange\n"
+"}\n"
+"QPushButton:pressed#btn_choose_path\n"
+"{\n"
+"    background-color: white;\n"
+"    color: black;\n"
+"    padding-left: 5px;\n"
+"    padding-top: 5px;\n"
+"}\n"
+"")
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("E:/Qt_Designer/folder_icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.btn_choose_path.setIcon(icon)
-        self.btn_choose_path.setIconSize(QtCore.QSize(30, 30))
+        self.btn_choose_path.setIconSize(QtCore.QSize(26, 30))
         self.btn_choose_path.setObjectName("btn_choose_path")
         self.verticalLayout_3.addWidget(self.btn_choose_path)
         self.verticalLayout_2.addWidget(self.fr_choose_file, 0, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignTop)
@@ -107,18 +141,64 @@ class Ui_MainWindow(object):
         self.btn_start.setMaximumSize(QtCore.QSize(125, 16777215))
         font = QtGui.QFont()
         font.setPointSize(9)
+        font.setBold(True)
+        font.setWeight(75)
         self.btn_start.setFont(font)
+        self.btn_start.setStyleSheet("QPushButton#btn_start\n"
+"{\n"
+"    background-color: rgba(255, 255, 255, 0.4);\n"
+"    color: white;\n"
+"    border-radius: 15px; \n"
+"    border: 2px solid white;\n"
+"}\n"
+"QPushButton:hover#btn_start\n"
+"{\n"
+"    background-color: lightgreen;\n"
+"}\n"
+"QPushButton:pressed#btn_start\n"
+"{\n"
+"    background-color: white;\n"
+"    color: black;\n"
+"    padding-left: 5px;\n"
+"    padding-top: 5px;\n"
+"}\n"
+"")
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap("E:/Qt_Designer/start_icon.jpg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.btn_start.setIcon(icon1)
-        self.btn_start.setIconSize(QtCore.QSize(35, 35))
+        self.btn_start.setIconSize(QtCore.QSize(30, 35))
         self.btn_start.setObjectName("btn_start")
         self.horizontalLayout_2.addWidget(self.btn_start)
         self.btn_close = QtWidgets.QPushButton(self.fr_action)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.btn_close.sizePolicy().hasHeightForWidth())
+        self.btn_close.setSizePolicy(sizePolicy)
         self.btn_close.setMaximumSize(QtCore.QSize(125, 16777215))
         font = QtGui.QFont()
         font.setPointSize(9)
+        font.setBold(True)
+        font.setWeight(75)
         self.btn_close.setFont(font)
+        self.btn_close.setStyleSheet("QPushButton#btn_close\n"
+"{\n"
+"   background-color: rgba(255, 255, 255, 0.4);\n"
+"    color: white;\n"
+"    border-radius: 15px; \n"
+"    border: 2px solid white;\n"
+"}\n"
+"QPushButton:hover#btn_close\n"
+"{\n"
+"   background-color: red\n"
+"}\n"
+"QPushButton:pressed#btn_close\n"
+"{\n"
+"    background-color: white;\n"
+"    color: black;\n"
+"    padding-left: 5px;\n"
+"    padding-top: 5px;\n"
+"}")
         icon2 = QtGui.QIcon()
         icon2.addPixmap(QtGui.QPixmap("E:/Qt_Designer/exit_icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.btn_close.setIcon(icon2)
@@ -147,6 +227,8 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(10)
         self.label_license_plate.setFont(font)
+        self.label_license_plate.setStyleSheet("background: rgba(255, 255, 255, 0.8);\n"
+"border: 2px solid white;")
         self.label_license_plate.setFrameShape(QtWidgets.QFrame.Box)
         self.label_license_plate.setScaledContents(True)
         self.label_license_plate.setAlignment(QtCore.Qt.AlignCenter)
@@ -173,6 +255,8 @@ class Ui_MainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.le_text_plate.setFont(font)
+        self.le_text_plate.setStyleSheet("background: rgb(255, 255, 255);\n"
+"border: 2px solid white;")
         self.le_text_plate.setText("")
         self.le_text_plate.setAlignment(QtCore.Qt.AlignCenter)
         self.le_text_plate.setObjectName("le_text_plate")
@@ -181,12 +265,13 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.fr_results)
         self.horizontalLayout.addWidget(self.fr_main_functions)
         self.fr_input_img = QtWidgets.QFrame(self.centralwidget)
+        self.fr_input_img.setStyleSheet("background: rgba(0,0,0,0.1)")
         self.fr_input_img.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.fr_input_img.setFrameShadow(QtWidgets.QFrame.Plain)
         self.fr_input_img.setLineWidth(1)
         self.fr_input_img.setObjectName("fr_input_img")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.fr_input_img)
-        self.verticalLayout_5.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_5.setContentsMargins(5, 5, 5, 5)
         self.verticalLayout_5.setSpacing(5)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
         self.le_notification = QtWidgets.QLineEdit(self.fr_input_img)
@@ -194,12 +279,16 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(9)
         self.le_notification.setFont(font)
+        self.le_notification.setStyleSheet("background: rgb(255, 255, 255)")
         self.le_notification.setObjectName("le_notification")
         self.verticalLayout_5.addWidget(self.le_notification)
         self.label_input_img = QtWidgets.QLabel(self.fr_input_img)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.label_input_img.setFont(font)
+        self.label_input_img.setStyleSheet("background: rgba(255, 255, 255, 0.8)")
         self.label_input_img.setFrameShape(QtWidgets.QFrame.Box)
         self.label_input_img.setLineWidth(2)
-        self.label_input_img.setText("")
         self.label_input_img.setScaledContents(True)
         self.label_input_img.setAlignment(QtCore.Qt.AlignCenter)
         self.label_input_img.setObjectName("label_input_img")
@@ -216,11 +305,12 @@ class Ui_MainWindow(object):
         self.cbox_type_search.setItemText(0, _translate("MainWindow", "Image"))
         self.cbox_type_search.setItemText(1, _translate("MainWindow", "Video"))
         self.le_file_path.setPlaceholderText(_translate("MainWindow", "Path"))
-        self.btn_choose_path.setText(_translate("MainWindow", "ChooseFile"))
+        self.btn_choose_path.setText(_translate("MainWindow", " ChooseFile"))
         self.btn_start.setText(_translate("MainWindow", " Process"))
         self.btn_close.setText(_translate("MainWindow", "Quit"))
         self.label_license_plate.setText(_translate("MainWindow", "License Plate Crop"))
         self.le_notification.setText(_translate("MainWindow", "Notification:"))
+        self.label_input_img.setText(_translate("MainWindow", "Input Image"))
 
 
 if __name__ == "__main__":
